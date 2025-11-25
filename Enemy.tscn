@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://e2n3e4m5y6"]
+
+[ext_resource type="Script" path="res://enemy.gd" id="1_1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(28, 28)
+
+[node name="Enemy" type="CharacterBody2D"]
+script = ExtResource("1_1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1")
+
+[node name="AnimatedSprite2D" type="Node2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="AnimatedSprite2D"]
+offset_left = -14.0
+offset_top = -14.0
+offset_right = 14.0
+offset_bottom = 14.0
+color = Color(0.8, 0.2, 0.2, 1)
+
+[node name="Polygon2D" type="Polygon2D" parent="AnimatedSprite2D"]
+color = Color(0.9, 0.1, 0.1, 1)
+polygon = PackedVector2Array(-10, -10, 10, -10, 0, 10)
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_1")
