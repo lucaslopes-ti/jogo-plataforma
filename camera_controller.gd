@@ -24,4 +24,3 @@ func _process(delta):
 
 func set_target(new_target: Node2D):
 	target = new_target
-

@@ -2,23 +2,31 @@ extends Node2D
 
 @onready var player = $Player
 @onready var ui = $UI
-@onready var camera = $Player/Camera2D
 
-var player_start_position = Vector2(200, 200)
+var player_start_position = Vector2(200, 368)
 
 func _ready():
 	print("Jogo de Plataforma iniciado!")
 	print("Use as setas para mover e ESPAÇO para pular")
 	
+	# Verificar se há múltiplos jogadores
+	var players = get_tree().get_nodes_in_group("player")
+	if players.size() > 1:
+		print("AVISO: Múltiplos jogadores encontrados: ", players.size())
+	
 	if player:
+		player.add_to_group("player")
 		player.collected_coin.connect(_on_player_collected_coin)
 		player.player_died.connect(_on_player_died)
-	
-	if camera:
-		camera.limit_left = -1000
-		camera.limit_right = 5000
-		camera.limit_top = -1000
-		camera.limit_bottom = 2000
+		print("Jogador conectado. Posição da plataforma 1: ", $Platform1.global_position if has_node("Platform1") else "N/A")
+		
+		# Configurar limites da câmera
+		var camera = player.get_node_or_null("Camera2D")
+		if camera:
+			camera.limit_left = -1000
+			camera.limit_right = 5000
+			camera.limit_top = -1000
+			camera.limit_bottom = 2000
 
 func _on_player_collected_coin():
 	if ui:
@@ -44,8 +52,5 @@ func respawn_player():
 	add_child(new_player)
 	player = new_player
 	
-	# Mover câmera para o novo jogador
-	if camera:
-		camera.get_parent().remove_child(camera)
-		new_player.add_child(camera)
+	# A câmera já está no Player.tscn, então não precisa mover
 

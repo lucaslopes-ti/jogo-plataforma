@@ -20,16 +20,7 @@ color = Color(0.2, 0.3, 0.4, 1)
 [node name="UI" parent="." instance=ExtResource("5_1")]
 
 [node name="Player" parent="." instance=ExtResource("1_1")]
-position = Vector2(200, 200)
-
-[node name="Camera2D" type="Camera2D" parent="Player"]
-enabled = true
-smoothing_enabled = true
-smoothing_speed = 5.0
-limit_left = -1000
-limit_right = 5000
-limit_top = -1000
-limit_bottom = 2000
+position = Vector2(200, 368)
 
 [node name="Platform1" parent="." instance=ExtResource("2_1")]
 position = Vector2(200, 400)

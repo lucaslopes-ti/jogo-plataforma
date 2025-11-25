@@ -24,7 +24,11 @@ signal collected_coin
 signal player_died
 
 func _ready():
-	pass
+	# Garantir que o jogador está configurado corretamente
+	print("Jogador inicializado na posição: ", global_position)
+	# Verificar se o collision shape está configurado
+	if collision_shape and not collision_shape.shape:
+		print("ERRO: CollisionShape2D não tem shape configurado!")
 
 func _physics_process(delta):
 	# Aplicar gravidade
@@ -72,6 +76,8 @@ func _physics_process(delta):
 	if sprite:
 		sprite.scale.x = abs(sprite.scale.x) * facing_direction
 	
+	# Usar move_and_slide com parâmetros padrão
+	# O segundo parâmetro (up_direction) é importante para is_on_floor()
 	move_and_slide()
 	
 	# Verificar se caiu do mapa
@@ -84,4 +90,3 @@ func die():
 
 func collect_coin():
 	collected_coin.emit()
-

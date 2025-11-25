@@ -1,18 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://bqj8vx5k3m2n1"]
+[gd_scene load_steps=3 format=3 uid="uid://bqj8vx5k3m2n1"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(32, 32)
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -16)
-
-[node name="Shape" type="RectangleShape2D" parent="CollisionShape2D"]
-size = Vector2(32, 32)
+shape = SubResource("RectangleShape2D_1")
 
 [node name="AnimatedSprite2D" type="Node2D" parent="."]
-position = Vector2(0, -16)
 
 [node name="ColorRect" type="ColorRect" parent="AnimatedSprite2D"]
 offset_left = -16.0
@@ -25,3 +24,7 @@ color = Color(0.2, 0.6, 1, 1)
 color = Color(0.3, 0.7, 1, 1)
 polygon = PackedVector2Array(-12, -12, 12, -12, 0, 12)
 
+[node name="Camera2D" type="Camera2D" parent="."]
+enabled = true
+smoothing_enabled = true
+smoothing_speed = 5.0

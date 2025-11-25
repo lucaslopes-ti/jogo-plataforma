@@ -34,9 +34,12 @@ func lose_life():
 
 func show_game_over():
 	game_over_panel.visible = true
+	# Não pausar completamente, apenas desabilitar física
 	get_tree().paused = true
 
 func _on_restart_button_pressed():
+	# Despausar primeiro
 	get_tree().paused = false
-	get_tree().reload_current_scene()
+	# Usar call_deferred para garantir execução
+	get_tree().call_deferred("reload_current_scene")
 

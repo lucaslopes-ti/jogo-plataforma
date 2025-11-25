@@ -13,8 +13,11 @@ var patrol_distance = 200.0
 
 func _ready():
 	start_position = global_position
-	if sprite:
-		sprite.play("walk")
+	# Conectar área de detecção
+	await get_tree().process_frame
+	var area = get_node_or_null("Area2D")
+	if area:
+		area.body_entered.connect(_on_area_body_entered)
 
 func _physics_process(delta):
 	# Aplicar gravidade
@@ -47,15 +50,6 @@ func _physics_process(delta):
 	if global_position.y > 2000:
 		queue_free()
 
-func _ready():
-	start_position = global_position
-	# Conectar área de detecção
-	await get_tree().process_frame
-	var area = get_node_or_null("Area2D")
-	if area:
-		area.body_entered.connect(_on_area_body_entered)
-
 func _on_area_body_entered(body):
 	if body.name == "Player":
 		body.die()
-
