@@ -1,3 +1,7 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+AJUSTE_RAPIDO_FPS.md
+.gitignore
+INSTRUCOES_SPRITES.md
+GUIA_INTEGRACAO_SPRITES.md
