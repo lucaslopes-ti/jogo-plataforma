@@ -14,32 +14,68 @@ shape = SubResource("RectangleShape2D_1")
 [node name="Visual" type="Node2D" parent="."]
 
 [node name="OuterRing" type="ColorRect" parent="Visual"]
-offset_left = -32.0
-offset_top = -32.0
-offset_right = 32.0
-offset_bottom = 32.0
-color = Color(0.2, 0.8, 1, 0.3)
+offset_left = -36.0
+offset_top = -36.0
+offset_right = 36.0
+offset_bottom = 36.0
+color = Color(0.3, 0.9, 1, 0.4)
 
 [node name="MiddleRing" type="ColorRect" parent="Visual"]
-offset_left = -24.0
-offset_top = -24.0
-offset_right = 24.0
-offset_bottom = 24.0
-color = Color(0, 0.6, 0.9, 0.5)
+offset_left = -28.0
+offset_top = -28.0
+offset_right = 28.0
+offset_bottom = 28.0
+color = Color(0.1, 0.8, 1, 0.6)
 
 [node name="InnerCore" type="ColorRect" parent="Visual"]
-offset_left = -16.0
-offset_top = -16.0
-offset_right = 16.0
-offset_bottom = 16.0
-color = Color(0.1, 0.7, 1, 1)
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+color = Color(0.2, 0.9, 1, 1)
 
 [node name="Center" type="ColorRect" parent="Visual"]
-offset_left = -8.0
-offset_top = -8.0
-offset_right = 8.0
-offset_bottom = 8.0
-color = Color(0, 1, 1, 1)
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+color = Color(1, 1, 1, 1)
+
+[node name="CenterGlow" type="ColorRect" parent="Visual"]
+offset_left = -12.0
+offset_top = -12.0
+offset_right = 12.0
+offset_bottom = 12.0
+color = Color(0, 1, 1, 0.5)
+z_index = -1
+
+[node name="Sparkle1" type="ColorRect" parent="Visual"]
+offset_left = -30.0
+offset_top = -30.0
+offset_right = -28.0
+offset_bottom = -28.0
+color = Color(1, 1, 0.5, 1)
+
+[node name="Sparkle2" type="ColorRect" parent="Visual"]
+offset_left = 28.0
+offset_top = -30.0
+offset_right = 30.0
+offset_bottom = -28.0
+color = Color(1, 1, 0.5, 1)
+
+[node name="Sparkle3" type="ColorRect" parent="Visual"]
+offset_left = -30.0
+offset_top = 28.0
+offset_right = -28.0
+offset_bottom = 30.0
+color = Color(1, 1, 0.5, 1)
+
+[node name="Sparkle4" type="ColorRect" parent="Visual"]
+offset_left = 28.0
+offset_top = 28.0
+offset_right = 30.0
+offset_bottom = 30.0
+color = Color(1, 1, 0.5, 1)
 
 [node name="Pixel1" type="ColorRect" parent="Visual"]
 offset_left = -28.0
@@ -70,14 +106,14 @@ offset_bottom = 28.0
 color = Color(0, 1, 1, 1)
 
 [node name="QuestionMark" type="Node2D" parent="Visual"]
-position = Vector2(0, -8)
+position = Vector2(0, -10)
 
 [node name="Q1" type="ColorRect" parent="Visual/QuestionMark"]
-offset_left = -4.0
-offset_top = -8.0
-offset_right = 4.0
-offset_bottom = -6.0
-color = Color(0, 0, 0, 1)
+offset_left = -5.0
+offset_top = -10.0
+offset_right = 5.0
+offset_bottom = -8.0
+color = Color(0.1, 0.1, 0.3, 1)
 
 [node name="Q2" type="ColorRect" parent="Visual/QuestionMark"]
 offset_left = -6.0

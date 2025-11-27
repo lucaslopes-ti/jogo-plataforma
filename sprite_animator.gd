@@ -85,3 +85,4 @@ func set_facing_direction(right: bool):
 	facing_right = right
 	flip_h = not facing_right
 
+

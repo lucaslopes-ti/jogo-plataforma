@@ -6,7 +6,14 @@ extends Area2D
 var collected = false
 
 func _ready():
-	body_entered.connect(_on_body_entered)
+	# Garantir que o sinal está conectado
+	if not body_entered.is_connected(_on_body_entered):
+		body_entered.connect(_on_body_entered)
+	
+	# Garantir que está monitorando
+	monitoring = true
+	monitorable = true
+	
 	# Rotação contínua da moeda
 	if animated_sprite:
 		create_rotation_animation()
@@ -23,9 +30,10 @@ func _on_body_entered(body):
 		if body.has_method("collect_coin"):
 			body.collect_coin()
 		
-		# Efeito de tela sutil
+		# Efeito de tela melhorado
 		if ScreenEffects:
-			ScreenEffects.shake_camera(2.0, 0.1)
+			ScreenEffects.shake_camera(3.0, 0.15)
+			ScreenEffects.flash_screen(Color(1, 0.84, 0, 0.2), 0.1)
 		
 		# Dar recompensas ao jogador
 		if UserDataManager:
@@ -38,7 +46,7 @@ func _on_body_entered(body):
 			ui.add_score(10)
 			ui.update_user_info()  # Atualizar informações do usuário
 		
-		# Efeito visual melhorado
+		# Efeito visual melhorado com mais impacto
 		if animated_sprite:
 			var tween = create_tween()
 			tween.parallel().tween_property(animated_sprite, "scale", Vector2(2.5, 2.5), 0.15)
@@ -58,24 +66,29 @@ func show_collect_feedback():
 	if ParticleEffects:
 		ParticleEffects.create_collect_effect(global_position, get_tree().current_scene)
 	
-	# Criar label flutuante
+	# Criar label flutuante com garantia de remoção
+	var scene = get_tree().current_scene
+	if not scene:
+		return
+	
 	var canvas = CanvasLayer.new()
+	canvas.name = "FloatingTextCanvas"
 	var label = Label.new()
 	label.text = "+2 Moedas\n+5 EXP"
 	label.add_theme_color_override("font_color", Color(1, 0.84, 0, 1))
 	label.add_theme_font_size_override("font_size", 20)
 	label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
 	label.add_theme_constant_override("outline_size", 2)
-	label.position = global_position - Vector2(50, 40)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.position = global_position - Vector2(50, 40)
 	canvas.add_child(label)
-	get_tree().current_scene.add_child(canvas)
+	scene.add_child(canvas)
 	
-	# Animação de flutuação
-	var tween = create_tween()
-	tween.parallel().tween_property(label, "position:y", label.position.y - 60, 1.0)
-	tween.parallel().tween_property(label, "modulate:a", 0.0, 1.0)
-	tween.parallel().tween_property(label, "scale", Vector2(1.2, 1.2), 1.0)
-	await tween.finished
-	canvas.queue_free()
+	# Animação de flutuação com callback garantido
+	var tween = scene.create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(label, "position:y", label.position.y - 60, 1.0)
+	tween.tween_property(label, "modulate:a", 0.0, 1.0)
+	tween.tween_property(label, "scale", Vector2(1.2, 1.2), 1.0)
+	tween.tween_callback(func(): canvas.queue_free()).set_delay(1.0)
 

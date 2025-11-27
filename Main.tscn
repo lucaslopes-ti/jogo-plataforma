@@ -258,7 +258,7 @@ z_index = -100
 [node name="QuestionUI" parent="." instance=ExtResource("8_1")]
 
 [node name="Player" parent="." instance=ExtResource("1_1")]
-position = Vector2(200, 368)
+position = Vector2(200, 350)
 
 [node name="Platform1" parent="." instance=ExtResource("2_1")]
 position = Vector2(200, 400)
@@ -306,7 +306,7 @@ position = Vector2(2600, 300)
 position = Vector2(2900, 250)
 
 [node name="Coin1" parent="." instance=ExtResource("3_1")]
-position = Vector2(500, 300)
+position = Vector2(500, 310)
 
 [node name="Coin2" parent="." instance=ExtResource("3_1")]
 position = Vector2(800, 250)
@@ -342,7 +342,7 @@ position = Vector2(900, 350)
 position = Vector2(1200, 300)
 
 [node name="Enemy1" parent="." instance=ExtResource("4_1")]
-position = Vector2(500, 368)
+position = Vector2(500, 318)
 
 [node name="Enemy2" parent="." instance=ExtResource("4_1")]
 position = Vector2(1100, 318)

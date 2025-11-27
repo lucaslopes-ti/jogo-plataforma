@@ -97,6 +97,31 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 text = "EXP: 0/100"
 
+[node name="HPBarContainer" type="HBoxContainer" parent="UI/HUD"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 35)
+
+[node name="HPLabel" type="Label" parent="UI/HUD/HPBarContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(100, 0)
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+text = "❤️ 5/5"
+
+[node name="HPBarBG" type="ColorRect" parent="UI/HUD/HPBarContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(200, 25)
+color = Color(0.2, 0.2, 0.2, 0.8)
+
+[node name="HPBarFill" type="ColorRect" parent="UI/HUD/HPBarContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+custom_minimum_size = Vector2(200, 25)
+color = Color(0, 1, 0.3, 1)
+
 [node name="TutorialPanel" type="Panel" parent="UI"]
 visible = true
 layout_mode = 1

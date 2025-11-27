@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://l1o2g3i4n5s6"]
+[gd_scene load_steps=5 format=3 uid="uid://l1o2g3i4n5s6"]
 
 [ext_resource type="Script" path="res://login_system.gd" id="1_1"]
 
@@ -17,6 +17,22 @@ border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
 border_color = Color(0, 0.8, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3"]
+bg_color = Color(0.15, 0.4, 0.6, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4"]
+bg_color = Color(0.2, 0.5, 0.7, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.3, 1, 1, 1)
 
 [node name="LoginSystem" type="CanvasLayer"]
 script = ExtResource("1_1")
@@ -78,15 +94,13 @@ placeholder_text = "Digite seu nome"
 
 [node name="LoginButton" type="Button" parent="LoginPanel/VBoxContainer"]
 layout_mode = 2
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 60)
 process_mode = 4
-theme_override_font_sizes/font_size = 22
-text = "ENTRAR / CRIAR CONTA"
-
-[node name="CreateAccountButton" type="Button" parent="LoginPanel/VBoxContainer"]
-layout_mode = 2
-custom_minimum_size = Vector2(0, 50)
-process_mode = 4
-theme_override_font_sizes/font_size = 18
-text = "Criar Nova Conta"
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(0, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_3")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_4")
+text = "ENTRAR"
 

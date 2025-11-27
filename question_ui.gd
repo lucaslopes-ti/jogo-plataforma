@@ -109,26 +109,37 @@ func _on_option_selected(option_index: int):
 	
 	# Destacar a resposta correta/errada
 	if correct:
-		# Efeitos visuais de sucesso
+		# Efeitos visuais de sucesso melhorados
 		if ScreenEffects:
-			ScreenEffects.flash_screen(Color(0, 1, 0.5, 0.2), 0.3)
-			ScreenEffects.shake_camera(3.0, 0.2)
+			ScreenEffects.flash_screen(Color(0, 1, 0.5, 0.3), 0.4)
+			ScreenEffects.shake_camera(4.0, 0.25)
 		
-		option_buttons[option_index].modulate = Color(0.3, 1, 0.3, 1)  # Verde
+		option_buttons[option_index].modulate = Color(0.2, 1, 0.4, 1)  # Verde brilhante
 		
-		# Animação de sucesso
+		# Animação de sucesso melhorada
 		var tween = create_tween()
-		tween.parallel().tween_property(option_buttons[option_index], "scale", Vector2(1.2, 1.2), 0.2)
-		tween.tween_property(option_buttons[option_index], "scale", Vector2(1.0, 1.0), 0.2)
+		tween.set_parallel(true)
+		tween.tween_property(option_buttons[option_index], "scale", Vector2(1.25, 1.25), 0.25)
+		tween.tween_property(option_buttons[option_index], "modulate", Color(0.2, 1, 0.4, 1), 0.15)
+		tween.tween_property(option_buttons[option_index], "scale", Vector2(1.0, 1.0), 0.2).set_delay(0.25)
 		
-		await get_tree().create_timer(1.0).timeout
+		# Efeito de partículas de sucesso
+		if ParticleEffects:
+			var button_pos = option_buttons[option_index].global_position
+			ParticleEffects.create_collect_effect(button_pos, get_tree().current_scene)
+		
+		await get_tree().create_timer(1.2).timeout
 		hide_question()
 		if current_portal and is_instance_valid(current_portal):
 			print("Chamando set_answered() no portal...")
-			# Chamar set_answered imediatamente
-			current_portal.set_answered()
+			# Chamar set_answered e aguardar desaparecimento completo
+			await current_portal.set_answered()
+			# Aguardar frames adicionais para garantir remoção
+			await get_tree().process_frame
+			await get_tree().process_frame
 			# Limpar referência ao portal
 			current_portal = null
+			print("Portal removido e referência limpa")
 	else:
 		# Efeitos visuais de erro
 		if ScreenEffects:

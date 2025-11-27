@@ -84,7 +84,7 @@ func add_experience(amount: int):
 func check_level_up():
 	var exp_needed = current_user.level * 100
 	if current_user.experience >= exp_needed:
-		var old_level = current_user.level
+		var _old_level = current_user.level  # Nível anterior (pode ser usado para efeitos futuros)
 		current_user.level += 1
 		current_user.experience -= exp_needed
 		level_up.emit()
@@ -149,3 +149,18 @@ func get_user_coins() -> int:
 
 func get_user_experience() -> int:
 	return current_user.get("experience", 0)
+
+func save_game_progress(level: int, position: Vector2):
+	# Salvar progresso do jogo
+	if not current_user.has("game_progress"):
+		current_user.game_progress = {}
+	current_user.game_progress.current_level = level
+	current_user.game_progress.last_position = {"x": position.x, "y": position.y}
+	current_user.game_progress.last_save_time = Time.get_unix_time_from_system()
+	save_user_data()
+
+func load_game_progress() -> Dictionary:
+	# Carregar progresso do jogo
+	if current_user.has("game_progress"):
+		return current_user.game_progress
+	return {}

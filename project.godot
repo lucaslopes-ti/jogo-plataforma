@@ -24,18 +24,19 @@ AchievementSystem="*res://achievement_system.gd"
 ScreenEffects="*res://screen_effects.gd"
 SoundManager="*res://sound_manager.gd"
 ParticleEffects="*res://particle_effects.gd"
-
-[display]
-
-window/size/viewport_width=1920
-window/size/viewport_height=1080
-window/stretch/mode="canvas_items"
+VisualEffects="*res://visual_effects.gd"
 
 [debug]
 
 settings/physics_2d/default_debug_collision_color=Color(0, 0, 0, 0)
 settings/physics_2d/collision_shapes_color=Color(0, 0, 0, 0)
 settings/physics_2d/contact_points_color=Color(0, 0, 0, 0)
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/stretch/mode="canvas_items"
 
 [dotnet]
 

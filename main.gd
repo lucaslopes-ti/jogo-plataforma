@@ -5,7 +5,7 @@ extends Node2D
 @onready var question_ui = $QuestionUI
 @onready var login_system = $LoginSystem
 
-var player_start_position = Vector2(200, 368)
+var player_start_position = Vector2(200, 350)
 var current_phase: int = 1
 var game_mode: String = "adventure"  # adventure, endless, multiplayer
 
@@ -28,7 +28,12 @@ func initialize_game():
 	if ScreenEffects:
 		ScreenEffects.fade_in(0.8)
 	
-	print("Use as setas para mover e ESPAÇO para pular")
+	# Salvar progresso ao iniciar
+	if UserDataManager:
+		UserDataManager.save_game_progress(current_phase, player_start_position)
+	
+	print("Use WASD ou setas para mover e ESPAÇO/W para pular")
+	print("Clique do mouse ou X para atacar")
 	print("Responda perguntas nos portais para avançar!")
 	
 	# Verificar se há múltiplos jogadores
@@ -40,6 +45,11 @@ func initialize_game():
 		player.add_to_group("player")
 		player.collected_coin.connect(_on_player_collected_coin)
 		player.player_died.connect(_on_player_died)
+		# Conectar sinal de HP para UI
+		if player.has_signal("hp_changed") and ui:
+			player.hp_changed.connect(ui._on_player_hp_changed)
+			# Atualizar HP inicial
+			ui._on_player_hp_changed(player.current_hp, player.max_hp)
 		
 		# Configurar limites da câmera
 		var camera = player.get_node_or_null("Camera2D")
@@ -96,15 +106,38 @@ func _on_player_died():
 			respawn_player()
 
 func respawn_player():
+	# Aguardar um pouco antes de respawnar
 	await get_tree().create_timer(0.5).timeout
-	if player:
+	
+	# Se o player ainda existe, remover
+	if player and is_instance_valid(player):
 		player.queue_free()
+		await get_tree().process_frame
 	
 	# Recriar jogador
 	var player_scene = load("res://Player.tscn")
-	var new_player = player_scene.instantiate()
-	new_player.position = player_start_position
-	new_player.collected_coin.connect(_on_player_collected_coin)
-	new_player.player_died.connect(_on_player_died)
-	add_child(new_player)
-	player = new_player
+	if player_scene:
+		var new_player = player_scene.instantiate()
+		new_player.position = player_start_position
+		new_player.collected_coin.connect(_on_player_collected_coin)
+		new_player.player_died.connect(_on_player_died)
+		# Conectar sinal de HP para UI
+		if new_player.has_signal("hp_changed") and ui:
+			new_player.hp_changed.connect(ui._on_player_hp_changed)
+			# Atualizar HP inicial
+			ui._on_player_hp_changed(new_player.current_hp, new_player.max_hp)
+		add_child(new_player)
+		player = new_player
+		
+		# Garantir que está no grupo
+		player.add_to_group("player")
+		
+		# Configurar câmera novamente
+		var camera = player.get_node_or_null("Camera2D")
+		if camera:
+			camera.limit_left = -1000
+			camera.limit_right = 5000
+			camera.limit_top = -1000
+			camera.limit_bottom = 2000
+		
+		print("Player respawnado em: ", player_start_position)

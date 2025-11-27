@@ -57,3 +57,4 @@ func set_sfx_volume(volume: float):
 		if player.playing:
 			player.volume_db = linear_to_db(sfx_volume * master_volume)
 
+

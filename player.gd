@@ -36,9 +36,19 @@ var animation_timer: float = 0.0
 var is_attacking: bool = false
 var attack_cooldown: float = 0.0
 var using_sprites: bool = false  # Se está usando sprites reais ou fallback
+var mouse_attack_was_pressed: bool = false  # Para detectar clique do mouse
+var x_key_was_pressed: bool = false  # Para detectar tecla X
+
+# Sistema de vida/HP
+var max_hp: int = 5
+var current_hp: int = 5
+var is_invincible: bool = false
+var invincibility_timer: float = 0.0
+const INVINCIBILITY_DURATION = 1.5  # 1.5 segundos de invencibilidade após dano
 
 signal collected_coin
 signal player_died
+signal hp_changed(current_hp: int, max_hp: int)
 
 func _ready():
 	# Garantir que o jogador está configurado corretamente
@@ -134,8 +144,8 @@ func _physics_process(delta):
 		if velocity.y > 0:
 			velocity.y = 0
 	
-	# Jump buffer
-	if Input.is_action_just_pressed("ui_accept"):
+	# Jump buffer - suporta ESPAÇO e W
+	if Input.is_action_just_pressed("ui_accept") or Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_SPACE):
 		jump_buffer = jump_buffer_max
 	else:
 		jump_buffer = max(0, jump_buffer - delta)
@@ -146,9 +156,21 @@ func _physics_process(delta):
 		jump_buffer = 0
 		coyote_time = coyote_time_max + 1
 		play_jump_animation()
+		
+		# Efeito visual de pulo
+		if ParticleEffects:
+			ParticleEffects.create_collect_effect(global_position + Vector2(0, 20), get_tree().current_scene)
+		if ScreenEffects:
+			ScreenEffects.shake_camera(1.0, 0.1)
 	
-	# Movimento horizontal com aceleração suave
-	var direction = Input.get_axis("ui_left", "ui_right")
+	# Movimento horizontal com aceleração suave - suporta setas e WASD
+	var left_input = Input.is_action_pressed("ui_left") or Input.is_key_pressed(KEY_A)
+	var right_input = Input.is_action_pressed("ui_right") or Input.is_key_pressed(KEY_D)
+	var direction = 0.0
+	if right_input:
+		direction = 1.0
+	elif left_input:
+		direction = -1.0
 	
 	if direction != 0:
 		facing_direction = direction
@@ -183,34 +205,74 @@ func _physics_process(delta):
 	if attack_cooldown > 0:
 		attack_cooldown -= delta
 	
-	# Sistema de ataque (tecla X ou clique do mouse)
-	if Input.is_action_just_pressed("ui_select") and attack_cooldown <= 0:
+	# Atualizar invencibilidade
+	if is_invincible:
+		invincibility_timer -= delta
+		if invincibility_timer <= 0:
+			is_invincible = false
+			# Restaurar opacidade normal
+			if animated_sprite:
+				animated_sprite.modulate = Color(1, 1, 1, 1)
+	
+	# Sistema de ataque - suporta tecla X, ui_select, ou clique esquerdo do mouse
+	var mouse_pressed = Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
+	var mouse_just_pressed = mouse_pressed and not mouse_attack_was_pressed
+	mouse_attack_was_pressed = mouse_pressed
+	
+	var x_key_pressed = Input.is_key_pressed(KEY_X)
+	var x_key_just_pressed = x_key_pressed and not x_key_was_pressed
+	x_key_was_pressed = x_key_pressed
+	
+	var attack_input = Input.is_action_just_pressed("ui_select") or \
+					   x_key_just_pressed or \
+					   mouse_just_pressed
+	
+	if attack_input and attack_cooldown <= 0 and not is_attacking:
 		perform_attack()
 	
 	# Usar move_and_slide com parâmetros padrão
 	move_and_slide()
 	
-	# Verificar se caiu
+	# Verificar se caiu - respawnar em vez de morrer
 	if global_position.y > 2000:
-		die()
+		# Respawnar na posição inicial
+		var main_scene = get_tree().current_scene
+		if main_scene and main_scene.has_method("respawn_player"):
+			main_scene.respawn_player()
+		else:
+			# Fallback: apenas reposicionar
+			global_position = Vector2(200, 350)
+			velocity = Vector2.ZERO
 
 func perform_attack():
 	if is_attacking:
 		return
 	
 	is_attacking = true
-	attack_cooldown = 0.5  # Cooldown de 0.5 segundos
+	attack_cooldown = 0.4  # Cooldown de 0.4 segundos (mais responsivo)
 	
-	# Efeito visual de ataque
+	# Efeito visual de ataque melhorado
 	if ScreenEffects:
-		ScreenEffects.shake_camera(3.0, 0.15)
+		ScreenEffects.shake_camera(4.0, 0.2)
+		ScreenEffects.flash_screen(Color(1, 0.8, 0.3, 0.15), 0.1)
+	
+	# Verificar hit imediatamente (antes da animação)
+	var hit = check_attack_hit()
 	
 	# Usar sprite animado se disponível
 	if using_sprites and animated_sprite and animated_sprite.sprite_frames:
 		if animated_sprite.sprite_frames.has_animation("attack"):
 			animated_sprite.play("attack")
-			# Aguardar animação terminar
-			await animated_sprite.animation_finished
+			# Aguardar animação terminar (com timeout de segurança)
+			var animation_timeout = get_tree().create_timer(1.0)  # Timeout de 1 segundo
+			var animation_finished = false
+			
+			# Aguardar animação ou timeout
+			while not animation_finished and animation_timeout.time_left > 0:
+				await get_tree().process_frame
+				if animated_sprite.animation != "attack" or not animated_sprite.is_playing():
+					animation_finished = true
+			
 			is_attacking = false
 			# Voltar para animação apropriada
 			if is_on_floor():
@@ -220,12 +282,12 @@ func perform_attack():
 					play_idle_animation()
 		else:
 			# Se não tem animação de ataque, usar fallback
+			await get_tree().create_timer(0.2).timeout
 			is_attacking = false
-			check_attack_hit()
 	else:
 		# Fallback: animação simples
+		await get_tree().create_timer(0.2).timeout
 		is_attacking = false
-		check_attack_hit()
 
 func play_idle_animation():
 	if animation_state != "idle" and not is_attacking:
@@ -379,33 +441,136 @@ func die():
 		tween.parallel().tween_property(body, "rotation_degrees", 360, 0.3)
 		tween.parallel().tween_property(body, "scale", Vector2(0.5, 0.5), 0.3)
 	
+	# Resetar HP para próximo respawn
+	current_hp = max_hp
+	hp_changed.emit(current_hp, max_hp)
+	
 	player_died.emit()
+
+func heal(amount: int):
+	# Sistema de cura
+	current_hp = min(max_hp, current_hp + amount)
+	hp_changed.emit(current_hp, max_hp)
+	print("Player curado! HP: ", current_hp, "/", max_hp)
+	
+	# Efeito visual de cura
+	if ScreenEffects:
+		ScreenEffects.flash_screen(Color(0, 1, 0.5, 0.3), 0.2)
+	
+	# Efeito de partículas de cura
+	if ParticleEffects:
+		ParticleEffects.create_collect_effect(global_position, get_tree().current_scene)
+
+func get_hp_percentage() -> float:
+	# Retornar porcentagem de HP (0.0 a 1.0)
+	return float(current_hp) / float(max_hp)
 
 func bounce():
 	# Pequeno pulo ao derrotar inimigo
 	velocity.y = JUMP_VELOCITY * 0.6  # 60% da força do pulo normal
 
+func take_damage(amount: int = 1):
+	# Sistema de vida completo - não morre instantaneamente
+	if is_invincible:
+		return  # Não tomar dano se estiver invencível
+	
+	current_hp -= amount
+	current_hp = max(0, current_hp)  # Garantir que não fica negativo
+	
+	print("Player tomou dano! HP: ", current_hp, "/", max_hp)
+	
+	# Emitir sinal para atualizar UI
+	hp_changed.emit(current_hp, max_hp)
+	
+	# Ativar invencibilidade temporária
+	is_invincible = true
+	invincibility_timer = INVINCIBILITY_DURATION
+	
+	# Efeitos visuais de dano
+	if ScreenEffects:
+		ScreenEffects.flash_screen(Color(1, 0.2, 0.2, 0.4), 0.2)
+		ScreenEffects.shake_camera(5.0, 0.3)
+	
+	# Animação de invencibilidade (piscar)
+	if animated_sprite:
+		var tween = create_tween()
+		tween.set_loops(int(INVINCIBILITY_DURATION / 0.1))
+		tween.tween_property(animated_sprite, "modulate", Color(1, 0.3, 0.3, 0.5), 0.1)
+		tween.tween_property(animated_sprite, "modulate", Color(1, 1, 1, 1), 0.1)
+		tween.tween_callback(func(): 
+			if animated_sprite:
+				animated_sprite.modulate = Color(1, 1, 1, 1)
+		)
+	
+	# Efeito de partículas de dano
+	if ParticleEffects:
+		ParticleEffects.create_explosion_effect(global_position, get_tree().current_scene, Color(1, 0.2, 0.2, 1))
+	
+	# Se HP chegou a 0, morrer
+	if current_hp <= 0:
+		die()
+	else:
+		# Empurrar jogador para trás ao tomar dano
+		var knockback = Vector2(-facing_direction * 200, -150)
+		velocity += knockback
+
 func check_attack_hit():
-	# Verificar se atacou um inimigo usando Area2D ou raycast
-	var attack_range = 60.0
+	# Verificar se atacou um inimigo - sistema de batalha melhorado
+	var attack_range = 80.0  # Alcance aumentado
 	var attack_position = global_position + Vector2(facing_direction * attack_range * 0.5, 0)
 	
-	# Usar overlap para detectar inimigos próximos
-	var space_state = get_world_2d().direct_space_state
-	var query = PhysicsPointQueryParameters2D.new()
-	query.position = attack_position
-	query.collision_mask = 0xFFFFFFFF  # Todas as camadas
-	
-	# Verificar inimigos no grupo
+	# Verificar inimigos no grupo ou na cena
 	var enemies = get_tree().get_nodes_in_group("enemy")
+	if enemies.is_empty():
+		# Se não há grupo, procurar por nós Enemy na cena
+		var scene = get_tree().current_scene
+		if scene:
+			for child in scene.get_children():
+				if child.name.begins_with("Enemy") and is_instance_valid(child):
+					# Verificar se o inimigo não está já derrotado
+					# A propriedade is_defeated existe no enemy.gd
+					if not child.is_defeated:
+						enemies.append(child)
+	
+	var closest_enemy = null
+	var closest_distance = attack_range
+	
 	for enemy in enemies:
 		if enemy and is_instance_valid(enemy):
+			# Verificar se o inimigo não está derrotado
+			# A propriedade is_defeated existe no enemy.gd
+			if enemy.is_defeated:
+				continue
+			
 			var distance = global_position.distance_to(enemy.global_position)
 			var direction_to_enemy = (enemy.global_position - global_position).normalized()
 			
-			# Verificar se está na frente e dentro do alcance
-			if distance <= attack_range and abs(direction_to_enemy.x * facing_direction) > 0.5:
-				if enemy.has_method("defeat_enemy"):
-					enemy.defeat_enemy(self)
-					bounce()  # Pequeno pulo ao derrotar
-					break
+			# Verificar se está na frente e dentro do alcance (mais permissivo)
+			var is_in_front = (direction_to_enemy.x * facing_direction) > -0.3  # Permite ataque em um ângulo maior
+			var is_in_range = distance <= attack_range
+			var is_same_level = abs(global_position.y - enemy.global_position.y) < 50.0  # Mesmo nível vertical
+			
+			if is_in_range and is_in_front and is_same_level:
+				if distance < closest_distance:
+					closest_distance = distance
+					closest_enemy = enemy
+	
+	# Atacar o inimigo mais próximo
+	if closest_enemy and is_instance_valid(closest_enemy) and closest_enemy.has_method("defeat_enemy"):
+		# Verificar novamente se não está derrotado antes de atacar
+		# A propriedade is_defeated existe no enemy.gd
+		if closest_enemy.is_defeated:
+			return false
+		
+		closest_enemy.defeat_enemy(self)
+		bounce()  # Pequeno pulo ao derrotar
+		# Efeito visual adicional melhorado
+		if ScreenEffects:
+			ScreenEffects.shake_camera(5.0, 0.2)
+			ScreenEffects.flash_screen(Color(0, 1, 0.5, 0.3), 0.15)
+		# Efeito de impacto
+		if ParticleEffects:
+			ParticleEffects.create_explosion_effect(closest_enemy.global_position, get_tree().current_scene, Color(0, 1, 0.5, 1))
+		return true
+	
+	return false
