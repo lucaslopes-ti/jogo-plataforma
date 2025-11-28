@@ -47,3 +47,4 @@ Para integrar os sprites do personagem, você precisa:
 5. O script player.gd será atualizado para usar essas animações
 
 
+

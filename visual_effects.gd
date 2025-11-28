@@ -107,3 +107,4 @@ static func create_text_popup(text: String, position: Vector2, color: Color, sce
 	tween.tween_property(label, "scale", Vector2(1.3, 1.3), 1.5)
 	tween.tween_callback(canvas.queue_free).set_delay(1.5)
 
+
