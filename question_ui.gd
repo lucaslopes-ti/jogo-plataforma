@@ -66,6 +66,13 @@ func show_question(question: Dictionary, portal: Node):
 		button.add_theme_font_size_override("font_size", 20)
 		
 		button.pressed.connect(_on_option_selected.bind(i))
+		
+		# Som de clique ao passar o mouse (hover)
+		button.mouse_entered.connect(func():
+			if SoundManager:
+				SoundManager.play_ui_hover_sound()
+		)
+		
 		options_container.add_child(button)
 		option_buttons.append(button)
 	
@@ -109,6 +116,10 @@ func _on_option_selected(option_index: int):
 	
 	# Destacar a resposta correta/errada
 	if correct:
+		# Som de resposta correta
+		if SoundManager:
+			SoundManager.play_question_correct_sound()
+		
 		# Efeitos visuais de sucesso melhorados
 		if ScreenEffects:
 			ScreenEffects.flash_screen(Color(0, 1, 0.5, 0.3), 0.4)
@@ -141,6 +152,10 @@ func _on_option_selected(option_index: int):
 			current_portal = null
 			print("Portal removido e referência limpa")
 	else:
+		# Som de resposta errada
+		if SoundManager:
+			SoundManager.play_question_wrong_sound()
+		
 		# Efeitos visuais de erro
 		if ScreenEffects:
 			ScreenEffects.flash_screen(Color(1, 0.2, 0.2, 0.2), 0.2)

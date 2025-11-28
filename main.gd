@@ -5,7 +5,7 @@ extends Node2D
 @onready var question_ui = $QuestionUI
 @onready var login_system = $LoginSystem
 
-var player_start_position = Vector2(200, 350)
+var player_start_position = Vector2(200, 450)
 var current_phase: int = 1
 var game_mode: String = "adventure"  # adventure, endless, multiplayer
 
@@ -27,6 +27,10 @@ func initialize_game():
 	# Fade in ao iniciar
 	if ScreenEffects:
 		ScreenEffects.fade_in(0.8)
+	
+	# Iniciar música de fundo
+	if SoundManager:
+		SoundManager.play_background_music()
 	
 	# Salvar progresso ao iniciar
 	if UserDataManager:

@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://cjam1hryggs8l" path="res://sprites/Walk.png" id="6_hp6x6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
-size = Vector2(402.28568, 559.15784)
+size = Vector2(402.28568, 451.3684)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3tkgg"]
 atlas = ExtResource("2_tdg3f")
@@ -293,15 +293,15 @@ animations = [{
 script = ExtResource("1_1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(46, -21.5)
-scale = Vector2(0.16406251, 0.1484375)
+position = Vector2(46, -13.500003)
+scale = Vector2(0.12, 0.11)
 shape = SubResource("RectangleShape2D_1")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
 [node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="."]
 position = Vector2(46.875, -44.500008)
-scale = Vector2(0.8925781, 1.0078125)
+scale = Vector2(0.65, 0.7)
 sprite_frames = SubResource("SpriteFrames_ibubc")
 animation = &"idle"
 autoplay = "idle"

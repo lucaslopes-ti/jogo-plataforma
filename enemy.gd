@@ -133,6 +133,10 @@ func _on_area_body_entered(body):
 				pass
 			else:
 				# Jogador tocou sem atacar - causar dano
+				# Som de ataque do inimigo (opcional, pode ser muito frequente)
+				# if SoundManager:
+				#	SoundManager.play_attack_sound()  # Usar som de ataque genérico
+				
 				if body.has_method("take_damage"):
 					body.take_damage(1)
 				else:
@@ -143,6 +147,10 @@ func defeat_enemy(player):
 	if is_defeated:
 		return
 	is_defeated = true
+	
+	# Som de derrota de inimigo
+	if SoundManager:
+		SoundManager.play_enemy_defeat_sound()
 	
 	# Desabilitar colisão imediatamente para evitar mais interações
 	var area = get_node_or_null("Area2D")

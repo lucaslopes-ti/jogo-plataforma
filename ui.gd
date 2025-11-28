@@ -1,20 +1,27 @@
 extends CanvasLayer
 
-@onready var score_label = $UI/HUD/ScoreLabel
-@onready var lives_label = $UI/HUD/LivesLabel
+# Painel Superior Esquerdo (Informações do Jogador)
+@onready var user_info_label = $UI/TopLeftPanel/VBoxContainer/UserInfoLabel
+@onready var level_label = $UI/TopLeftPanel/VBoxContainer/LevelLabel
+
+# Painel Superior Direito (Estatísticas)
+@onready var score_label = $UI/TopRightPanel/VBoxContainer/ScoreLabel
+@onready var coins_label = $UI/TopRightPanel/VBoxContainer/CoinsLabel
+@onready var exp_label = $UI/TopRightPanel/VBoxContainer/ExpLabel
+@onready var questions_label = $UI/TopRightPanel/VBoxContainer/QuestionsLabel
+@onready var lives_label = $UI/TopRightPanel/VBoxContainer/LivesLabel
+
+# Painel Inferior Esquerdo (HP)
+@onready var hp_bar_container = $UI/BottomLeftPanel/VBoxContainer/HPBarContainer
+@onready var hp_bar_fill = $UI/BottomLeftPanel/VBoxContainer/HPBarFill
+@onready var hp_bar_bg = $UI/BottomLeftPanel/VBoxContainer/HPBarBG
+@onready var hp_label = $UI/BottomLeftPanel/VBoxContainer/HPLabel
+
+# Painéis de diálogo
 @onready var game_over_panel = $UI/GameOverPanel
 @onready var restart_button = $UI/GameOverPanel/RestartButton
 @onready var tutorial_panel = $UI/TutorialPanel
 @onready var close_tutorial_button = $UI/TutorialPanel/VBoxContainer/CloseButton
-@onready var questions_label = $UI/HUD/QuestionsLabel
-@onready var user_info_label = $UI/HUD/UserInfoLabel
-@onready var level_label = $UI/HUD/LevelLabel
-@onready var coins_label = $UI/HUD/CoinsLabel
-@onready var exp_label = $UI/HUD/ExpLabel
-@onready var hp_bar_container = $UI/HUD/HPBarContainer
-@onready var hp_bar_fill = $UI/HUD/HPBarContainer/HPBarFill
-@onready var hp_bar_bg = $UI/HUD/HPBarContainer/HPBarBG
-@onready var hp_label = $UI/HUD/HPBarContainer/HPLabel
 
 var score = 0
 var lives = 3
@@ -22,11 +29,17 @@ var questions_answered = 0
 var questions_correct = 0
 
 func _ready():
-	# Garantir que o HUD está visível
-	var hud = get_node_or_null("UI/HUD")
-	if hud:
-		hud.visible = true
-		print("HUD encontrado e visível")
+	# Garantir que os painéis estão visíveis
+	var top_left = get_node_or_null("UI/TopLeftPanel")
+	var top_right = get_node_or_null("UI/TopRightPanel")
+	var bottom_left = get_node_or_null("UI/BottomLeftPanel")
+	
+	if top_left:
+		top_left.visible = true
+	if top_right:
+		top_right.visible = true
+	if bottom_left:
+		bottom_left.visible = true
 	
 	update_ui()
 	game_over_panel.visible = false
@@ -204,7 +217,8 @@ func _on_player_hp_changed(current_hp: int, max_hp: int):
 		
 		# Animação suave da barra
 		var tween = create_tween()
-		tween.tween_property(hp_bar_fill, "size:x", hp_bar_bg.size.x * percentage, 0.3)
+		var target_width = hp_bar_bg.size.x * percentage
+		tween.tween_property(hp_bar_fill, "size:x", target_width, 0.3)
 		
 		# Mudar cor baseado na porcentagem
 		if percentage > 0.6:
@@ -216,9 +230,11 @@ func _on_player_hp_changed(current_hp: int, max_hp: int):
 		
 		# Efeito de pulso quando HP está baixo
 		if percentage < 0.3:
-			create_ui_pulse(hp_bar_container)
+			var bottom_panel = get_node_or_null("UI/BottomLeftPanel")
+			if bottom_panel:
+				create_ui_pulse(bottom_panel)
 	
 	# Atualizar label de HP
 	if hp_label:
-		animate_label_update(hp_label, "❤️ " + str(current_hp) + "/" + str(max_hp))
+		animate_label_update(hp_label, "❤️ VIDA: " + str(current_hp) + "/" + str(max_hp))
 		create_ui_pulse(hp_label)

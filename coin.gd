@@ -25,10 +25,16 @@ func create_rotation_animation():
 	tween.tween_property(animated_sprite, "rotation", TAU, 1.0)
 
 func _on_body_entered(body):
-	if body.name == "Player" and not collected:
+	# Verificar se é o jogador (por nome ou grupo)
+	var is_player = body.name == "Player" or body.is_in_group("player")
+	if is_player and not collected:
 		collected = true
 		if body.has_method("collect_coin"):
 			body.collect_coin()
+		
+		# Som de coleta de moeda
+		if SoundManager:
+			SoundManager.play_coin_collect_sound()
 		
 		# Efeito de tela melhorado
 		if ScreenEffects:

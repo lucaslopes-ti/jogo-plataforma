@@ -1,8 +1,9 @@
-[gd_scene load_steps=45 format=3 uid="uid://eal6n3o4p5q6"]
+[gd_scene load_steps=47 format=3 uid="uid://eal6n3o4p5q6"]
 
 [ext_resource type="PackedScene" uid="uid://bqj8vx5k3m2n1" path="res://Player.tscn" id="1_1"]
 [ext_resource type="PackedScene" uid="uid://c8k5m2n3p4q5" path="res://Platform.tscn" id="2_1"]
 [ext_resource type="PackedScene" uid="uid://c1o1n2p3q4r5" path="res://Coin.tscn" id="3_1"]
+[ext_resource type="PackedScene" uid="uid://special_coin_2024" path="res://SpecialCoin.tscn" id="13_1"]
 [ext_resource type="PackedScene" uid="uid://e2n3e4m5y6" path="res://Enemy.tscn" id="4_1"]
 [ext_resource type="PackedScene" uid="uid://u1i2n3t4e5r6" path="res://UI.tscn" id="5_1"]
 [ext_resource type="Script" uid="uid://nnqf312vr8yk" path="res://main.gd" id="6_1"]
@@ -15,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://l1o2g3i4n5s6" path="res://LoginSystem.tscn" id="10_1"]
 [ext_resource type="Texture2D" uid="uid://bxp1o6px8xsf6" path="res://sprites/Jump.png" id="10_kjvhd"]
 [ext_resource type="Texture2D" uid="uid://cjam1hryggs8l" path="res://sprites/Walk.png" id="11_5tuhn"]
+[ext_resource type="Script" path="res://ground_system.gd" id="11_1"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3tkgg"]
 atlas = ExtResource("7_j4qnp")
@@ -251,6 +253,10 @@ script = ExtResource("6_1")
 [node name="TechBackground" parent="." instance=ExtResource("9_1")]
 z_index = -100
 
+[node name="GroundSystem" type="Node2D" parent="."]
+script = ExtResource("11_1")
+z_index = -1
+
 [node name="LoginSystem" parent="." instance=ExtResource("10_1")]
 
 [node name="UI" parent="." instance=ExtResource("5_1")]
@@ -258,115 +264,118 @@ z_index = -100
 [node name="QuestionUI" parent="." instance=ExtResource("8_1")]
 
 [node name="Player" parent="." instance=ExtResource("1_1")]
-position = Vector2(200, 350)
+position = Vector2(200, 450)
 
 [node name="Platform1" parent="." instance=ExtResource("2_1")]
-position = Vector2(200, 400)
+position = Vector2(200, 500)
 
 [node name="Platform2" parent="." instance=ExtResource("2_1")]
-position = Vector2(500, 350)
+position = Vector2(500, 450)
 
 [node name="Platform3" parent="." instance=ExtResource("2_1")]
-position = Vector2(800, 300)
+position = Vector2(800, 400)
 
 [node name="Platform4" parent="." instance=ExtResource("2_1")]
-position = Vector2(1100, 250)
+position = Vector2(1100, 350)
 
 [node name="Platform5" parent="." instance=ExtResource("2_1")]
-position = Vector2(1400, 200)
+position = Vector2(1400, 300)
 
 [node name="Platform6" parent="." instance=ExtResource("2_1")]
-position = Vector2(0, 450)
+position = Vector2(0, 550)
 
 [node name="Platform7" parent="." instance=ExtResource("2_1")]
-position = Vector2(300, 500)
+position = Vector2(300, 610)
 
 [node name="Platform8" parent="." instance=ExtResource("2_1")]
-position = Vector2(600, 450)
+position = Vector2(601, 590)
 
 [node name="Platform9" parent="." instance=ExtResource("2_1")]
-position = Vector2(900, 400)
+position = Vector2(902, 566)
 
 [node name="Platform10" parent="." instance=ExtResource("2_1")]
-position = Vector2(1200, 350)
+position = Vector2(1202, 544)
 
 [node name="Platform11" parent="." instance=ExtResource("2_1")]
-position = Vector2(1700, 150)
+position = Vector2(1700, 250)
 
 [node name="Platform12" parent="." instance=ExtResource("2_1")]
-position = Vector2(2000, 100)
+position = Vector2(2000, 200)
 
 [node name="Platform13" parent="." instance=ExtResource("2_1")]
-position = Vector2(2300, 200)
+position = Vector2(2300, 300)
 
 [node name="Platform14" parent="." instance=ExtResource("2_1")]
-position = Vector2(2600, 300)
+position = Vector2(2600, 400)
 
 [node name="Platform15" parent="." instance=ExtResource("2_1")]
-position = Vector2(2900, 250)
+position = Vector2(2900, 350)
 
 [node name="Coin1" parent="." instance=ExtResource("3_1")]
-position = Vector2(500, 310)
+position = Vector2(500, 420)
 
 [node name="Coin2" parent="." instance=ExtResource("3_1")]
-position = Vector2(800, 250)
+position = Vector2(800, 370)
 
 [node name="Coin3" parent="." instance=ExtResource("3_1")]
-position = Vector2(1100, 200)
+position = Vector2(1100, 320)
 
 [node name="Coin4" parent="." instance=ExtResource("3_1")]
-position = Vector2(1400, 150)
+position = Vector2(1400, 270)
 
 [node name="Coin5" parent="." instance=ExtResource("3_1")]
-position = Vector2(1700, 100)
+position = Vector2(1700, 220)
 
 [node name="Coin6" parent="." instance=ExtResource("3_1")]
-position = Vector2(2000, 50)
+position = Vector2(2000, 170)
 
 [node name="Coin7" parent="." instance=ExtResource("3_1")]
-position = Vector2(2300, 150)
+position = Vector2(2300, 270)
 
 [node name="Coin8" parent="." instance=ExtResource("3_1")]
-position = Vector2(2600, 250)
+position = Vector2(2600, 370)
 
 [node name="Coin9" parent="." instance=ExtResource("3_1")]
-position = Vector2(2900, 200)
+position = Vector2(2900, 320)
 
 [node name="Coin10" parent="." instance=ExtResource("3_1")]
-position = Vector2(600, 400)
+position = Vector2(602, 549)
 
 [node name="Coin11" parent="." instance=ExtResource("3_1")]
-position = Vector2(900, 350)
+position = Vector2(902, 528)
 
 [node name="Coin12" parent="." instance=ExtResource("3_1")]
-position = Vector2(1200, 300)
+position = Vector2(1208, 502)
+
+[node name="SpecialCoin" parent="." instance=ExtResource("13_1")]
+position = Vector2(300, 570)
 
 [node name="Enemy1" parent="." instance=ExtResource("4_1")]
-position = Vector2(500, 318)
+position = Vector2(500, 418)
 
 [node name="Enemy2" parent="." instance=ExtResource("4_1")]
 position = Vector2(1100, 318)
 
 [node name="Enemy3" parent="." instance=ExtResource("4_1")]
-position = Vector2(1700, 268)
+position = Vector2(1700, 218)
 
 [node name="Enemy4" parent="." instance=ExtResource("4_1")]
-position = Vector2(2300, 318)
+position = Vector2(2300, 268)
 
 [node name="Enemy5" parent="." instance=ExtResource("4_1")]
-position = Vector2(2900, 368)
+position = Vector2(2900, 318)
 
 [node name="QuestionPortal1" parent="." instance=ExtResource("7_1")]
-position = Vector2(800, 250)
+position = Vector2(800, 360)
 
 [node name="QuestionPortal2" parent="." instance=ExtResource("7_1")]
-position = Vector2(1400, 150)
+position = Vector2(1400, 260)
 
 [node name="QuestionPortal3" parent="." instance=ExtResource("7_1")]
-position = Vector2(2000, 50)
+position = Vector2(2000, 160)
 
 [node name="QuestionPortal4" parent="." instance=ExtResource("7_1")]
-position = Vector2(2600, 250)
+position = Vector2(2600, 360)
 
 [node name="QuestionPortal5" parent="." instance=ExtResource("7_1")]
-position = Vector2(2900, 200)
+position = Vector2(2900, 310)

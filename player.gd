@@ -132,6 +132,8 @@ func adjust_animation_speeds():
 			animated_sprite.play("idle")
 		print("Animação iniciada: ", animated_sprite.animation)
 
+var was_on_floor = false  # Para detectar aterrissagem
+
 func _physics_process(delta):
 	# Aplicar gravidade
 	if not is_on_floor():
@@ -139,10 +141,18 @@ func _physics_process(delta):
 		coyote_time += delta
 		is_jumping = true
 	else:
+		# Detectar aterrissagem
+		if not was_on_floor and is_jumping:
+			# Som de aterrissagem
+			if SoundManager and abs(velocity.y) > 100:
+				SoundManager.play_land_sound()
+		
 		coyote_time = 0.0
 		is_jumping = false
 		if velocity.y > 0:
 			velocity.y = 0
+	
+	was_on_floor = is_on_floor()
 	
 	# Jump buffer - suporta ESPAÇO e W
 	if Input.is_action_just_pressed("ui_accept") or Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_SPACE):
@@ -156,6 +166,10 @@ func _physics_process(delta):
 		jump_buffer = 0
 		coyote_time = coyote_time_max + 1
 		play_jump_animation()
+		
+		# Som de pulo
+		if SoundManager:
+			SoundManager.play_jump_sound()
 		
 		# Efeito visual de pulo
 		if ParticleEffects:
@@ -215,19 +229,27 @@ func _physics_process(delta):
 				animated_sprite.modulate = Color(1, 1, 1, 1)
 	
 	# Sistema de ataque - suporta tecla X, ui_select, ou clique esquerdo do mouse
-	var mouse_pressed = Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
-	var mouse_just_pressed = mouse_pressed and not mouse_attack_was_pressed
-	mouse_attack_was_pressed = mouse_pressed
+	# Detectar apenas o frame exato em que foi pressionado (não enquanto está pressionado)
+	# IMPORTANTE: Não atacar se estiver pulando no mesmo frame para evitar conflito
+	var is_jumping_this_frame = jump_buffer > 0
 	
-	var x_key_pressed = Input.is_key_pressed(KEY_X)
-	var x_key_just_pressed = x_key_pressed and not x_key_was_pressed
-	x_key_was_pressed = x_key_pressed
+	var mouse_current = Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
+	var mouse_just_pressed = mouse_current and not mouse_attack_was_pressed
+	mouse_attack_was_pressed = mouse_current
 	
-	var attack_input = Input.is_action_just_pressed("ui_select") or \
+	var x_key_current = Input.is_key_pressed(KEY_X)
+	var x_key_just_pressed = x_key_current and not x_key_was_pressed
+	x_key_was_pressed = x_key_current
+	
+	# Só atacar se realmente foi pressionado NESTE frame (just_pressed)
+	# E não usar ui_select se estiver pulando (pode ser a mesma tecla)
+	var ui_select_pressed = Input.is_action_just_pressed("ui_select") and not is_jumping_this_frame
+	var attack_input = ui_select_pressed or \
 					   x_key_just_pressed or \
 					   mouse_just_pressed
 	
-	if attack_input and attack_cooldown <= 0 and not is_attacking:
+	# Garantir que só ataca se não está atacando, não está em cooldown, não está pulando, e o input é válido
+	if attack_input and attack_cooldown <= 0 and not is_attacking and not is_jumping_this_frame:
 		perform_attack()
 	
 	# Usar move_and_slide com parâmetros padrão
@@ -250,6 +272,10 @@ func perform_attack():
 	
 	is_attacking = true
 	attack_cooldown = 0.4  # Cooldown de 0.4 segundos (mais responsivo)
+	
+	# Som de ataque
+	if SoundManager:
+		SoundManager.play_attack_sound()
 	
 	# Efeito visual de ataque melhorado
 	if ScreenEffects:
@@ -424,6 +450,10 @@ func reset_limbs():
 		torso.position = Vector2.ZERO
 
 func die():
+	# Som de morte
+	if SoundManager:
+		SoundManager.play_death_sound()
+	
 	# Efeito visual ao morrer
 	if ScreenEffects:
 		ScreenEffects.flash_screen(Color(1, 0.2, 0.2, 0.5), 0.3)
@@ -478,6 +508,10 @@ func take_damage(amount: int = 1):
 	current_hp = max(0, current_hp)  # Garantir que não fica negativo
 	
 	print("Player tomou dano! HP: ", current_hp, "/", max_hp)
+	
+	# Som de dano
+	if SoundManager:
+		SoundManager.play_damage_sound()
 	
 	# Emitir sinal para atualizar UI
 	hp_changed.emit(current_hp, max_hp)
@@ -564,6 +598,11 @@ func check_attack_hit():
 		
 		closest_enemy.defeat_enemy(self)
 		bounce()  # Pequeno pulo ao derrotar
+		
+		# Som de derrota de inimigo
+		if SoundManager:
+			SoundManager.play_enemy_defeat_sound()
+		
 		# Efeito visual adicional melhorado
 		if ScreenEffects:
 			ScreenEffects.shake_camera(5.0, 0.2)

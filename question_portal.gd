@@ -135,6 +135,11 @@ func activate_portal():
 	if question_answered or not is_active:
 		print("Portal não pode ser ativado - já foi respondido ou está inativo")
 		return
+	
+	# Som de ativação de portal
+	if SoundManager:
+		SoundManager.play_portal_activate_sound()
+	
 	portal_activated.emit()
 	# O sistema de UI vai lidar com mostrar a pergunta
 
@@ -142,6 +147,10 @@ func set_answered():
 	print("Portal marcado como respondido!")
 	question_answered = true
 	is_active = false
+	
+	# Som de sucesso do portal
+	if SoundManager:
+		SoundManager.play_portal_success_sound()
 	
 	# Criar efeito de sucesso antes de desaparecer
 	create_success_effect()

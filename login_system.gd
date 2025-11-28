@@ -163,6 +163,10 @@ func _on_login_button_down():
 func _on_login_pressed():
 	print("=== BOTÃO ENTRAR PRESSIONADO ===")
 	
+	# Som de clique no botão
+	if SoundManager:
+		SoundManager.play_ui_click_sound()
+	
 	if not username_input:
 		print("ERRO: username_input não existe!")
 		return
