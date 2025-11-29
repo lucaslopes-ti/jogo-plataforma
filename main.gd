@@ -8,6 +8,7 @@ extends Node2D
 var player_start_position = Vector2(200, 450)
 var current_phase: int = 1
 var game_mode: String = "adventure"  # adventure, endless, multiplayer
+var settings_menu_instance = null
 
 func _ready():
 	print("MathQuest iniciado!")
@@ -84,6 +85,101 @@ func _on_user_logged_in(user_data: Dictionary):
 	if login_system:
 		login_system.login_panel.visible = false
 	initialize_game()
+
+func _input(event):
+	# Abrir menu de configurações com ESC
+	if event.is_action_pressed("ui_cancel"):
+		# Se o menu já está aberto, fechar
+		if settings_menu_instance:
+			close_settings_menu()
+			return
+		
+		# Verificar se não há outros menus abertos
+		if ui and ui.tutorial_panel and ui.tutorial_panel.visible:
+			return  # Não abrir se o tutorial estiver aberto
+		if ui and ui.game_over_panel and ui.game_over_panel.visible:
+			return  # Não abrir se o game over estiver aberto
+		
+		open_settings_menu()
+
+func open_settings_menu():
+	"""Abre o menu de configurações durante o jogo"""
+	print("Tentando abrir menu de configurações...")
+	
+	if settings_menu_instance:
+		print("Menu já está aberto!")
+		return  # Já está aberto
+	
+	if not SettingsManager:
+		print("ERRO: SettingsManager não está disponível!")
+		return
+	
+	var settings_scene = load("res://SettingsMenu.tscn")
+	if not settings_scene:
+		print("ERRO: Não foi possível carregar SettingsMenu.tscn")
+		return
+	
+	print("Cena carregada, instanciando...")
+	settings_menu_instance = settings_scene.instantiate()
+	if not settings_menu_instance:
+		print("ERRO: Falha ao instanciar menu de configurações")
+		return
+	
+	# Criar CanvasLayer para o menu
+	var canvas = CanvasLayer.new()
+	canvas.name = "SettingsCanvas"
+	canvas.layer = 100  # Acima de tudo (CanvasLayer usa 'layer' em vez de 'z_index')
+	add_child(canvas)
+	canvas.add_child(settings_menu_instance)
+	
+	# Garantir que o menu está visível e configurado corretamente
+	settings_menu_instance.visible = true
+	settings_menu_instance.modulate.a = 1.0
+	settings_menu_instance.scale = Vector2(1.0, 1.0)
+	
+	# Garantir que o menu ocupa toda a tela
+	settings_menu_instance.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	
+	# Garantir que processa mesmo quando pausado
+	settings_menu_instance.process_mode = Node.PROCESS_MODE_ALWAYS
+	canvas.process_mode = Node.PROCESS_MODE_ALWAYS
+	
+	# Pausar o jogo (mas o menu continuará processando)
+	get_tree().paused = true
+	
+	# Aguardar um frame para garantir que está renderizado
+	await get_tree().process_frame
+	print("Menu renderizado e pronto para exibição!")
+	
+	# Conectar sinal para saber quando fechar
+	if settings_menu_instance.has_signal("menu_closed"):
+		if not settings_menu_instance.menu_closed.is_connected(_on_settings_menu_closed):
+			settings_menu_instance.menu_closed.connect(_on_settings_menu_closed)
+	
+	print("Menu de configurações aberto com ESC!")
+
+func close_settings_menu():
+	"""Fecha o menu de configurações"""
+	if not settings_menu_instance:
+		return
+	
+	print("Fechando menu de configurações...")
+	
+	# Despausar o jogo
+	get_tree().paused = false
+	
+	# Remover o CanvasLayer
+	var canvas = settings_menu_instance.get_parent()
+	if canvas and canvas.name == "SettingsCanvas":
+		canvas.queue_free()
+	
+	settings_menu_instance = null
+	print("Menu fechado!")
+
+func _on_settings_menu_closed():
+	"""Chamado quando o menu de configurações é fechado"""
+	settings_menu_instance = null
+	get_tree().paused = false
 
 func connect_question_portals():
 	for portal in get_tree().get_nodes_in_group("question_portal"):

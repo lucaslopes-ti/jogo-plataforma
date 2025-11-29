@@ -1,0 +1,290 @@
+[gd_scene load_steps=4 format=3 uid="uid://settings_menu"]
+
+[ext_resource type="Script" path="res://settings_menu.gd" id="1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
+bg_color = Color(0.05, 0.15, 0.25, 0.98)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.3, 0.7, 1, 1)
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2"]
+bg_color = Color(0.1, 0.3, 0.5, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.3, 0.7, 1, 1)
+
+[node name="SettingsMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -400.0
+offset_right = 500.0
+offset_bottom = 400.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "⚙️ CONFIGURAÇÕES"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 48
+theme_override_colors/font_color = Color(0.3, 0.8, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="AudioSection" type="VBoxContainer" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="AudioTitle" type="Label" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+text = "🔊 ÁUDIO"
+theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color = Color(0.5, 1, 0.8, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+
+[node name="MasterVolumeContainer" type="HBoxContainer" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MasterVolumeLabel" type="Label" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/AudioSection/MasterVolumeContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_stretch_ratio = 0.4
+text = "Volume Mestre: 100%"
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+
+[node name="MasterVolumeSlider" type="HSlider" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/AudioSection/MasterVolumeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.0
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="MusicVolumeContainer" type="HBoxContainer" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MusicVolumeLabel" type="Label" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/AudioSection/MusicVolumeContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_stretch_ratio = 0.4
+text = "Música: 70%"
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+
+[node name="MusicVolumeSlider" type="HSlider" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/AudioSection/MusicVolumeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.0
+max_value = 1.0
+step = 0.01
+value = 0.7
+
+[node name="SFXVolumeContainer" type="HBoxContainer" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SFXVolumeLabel" type="Label" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/AudioSection/SFXVolumeContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_stretch_ratio = 0.4
+text = "Efeitos Sonoros: 100%"
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+
+[node name="SFXVolumeSlider" type="HSlider" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/AudioSection/SFXVolumeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.0
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="VideoSection" type="VBoxContainer" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="VideoTitle" type="Label" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/VideoSection"]
+layout_mode = 2
+text = "🖥️ VÍDEO"
+theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color = Color(0.5, 1, 0.8, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+
+[node name="FullscreenContainer" type="HBoxContainer" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/VideoSection"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FullscreenLabel" type="Label" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/VideoSection/FullscreenContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Tela Cheia"
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+
+[node name="FullscreenCheckBox" type="CheckBox" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/VideoSection/FullscreenContainer"]
+layout_mode = 2
+
+[node name="VSyncContainer" type="HBoxContainer" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/VideoSection"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VSyncLabel" type="Label" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/VideoSection/VSyncContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "VSync"
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+
+[node name="VSyncCheckBox" type="CheckBox" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/VideoSection/VSyncContainer"]
+layout_mode = 2
+button_pressed = true
+
+[node name="ResolutionContainer" type="HBoxContainer" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/VideoSection"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ResolutionLabel" type="Label" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/VideoSection/ResolutionContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_stretch_ratio = 0.4
+text = "Resolução:"
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+
+[node name="ResolutionOptionButton" type="OptionButton" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/VideoSection/ResolutionContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+
+[node name="GameplaySection" type="VBoxContainer" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="GameplayTitle" type="Label" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/GameplaySection"]
+layout_mode = 2
+text = "🎮 GAMEPLAY"
+theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color = Color(0.5, 1, 0.8, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+
+[node name="DifficultyContainer" type="HBoxContainer" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/GameplaySection"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DifficultyLabel" type="Label" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/GameplaySection/DifficultyContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_stretch_ratio = 0.4
+text = "Dificuldade:"
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+
+[node name="DifficultyOptionButton" type="OptionButton" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/GameplaySection/DifficultyContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+
+[node name="TutorialContainer" type="HBoxContainer" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/GameplaySection"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TutorialLabel" type="Label" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/GameplaySection/TutorialContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Mostrar Tutorial"
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+
+[node name="ShowTutorialCheckBox" type="CheckBox" parent="Panel/VBoxContainer/ScrollContainer/VBoxContainer/GameplaySection/TutorialContainer"]
+layout_mode = 2
+button_pressed = true
+
+[node name="ButtonContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 20
+
+[node name="Spacer" type="Control" parent="Panel/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ResetButton" type="Button" parent="Panel/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(150, 50)
+text = "RESETAR"
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 0.8, 0.3, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_2")
+
+[node name="BackButton" type="Button" parent="Panel/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(150, 50)
+text = "VOLTAR"
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_2")
+

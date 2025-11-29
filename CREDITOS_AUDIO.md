@@ -28,3 +28,4 @@ Sound Effects by LIECIO from Pixabay
 
 Os créditos também estão incluídos no código-fonte em `sound_manager.gd` como comentário no topo do arquivo.
 
+

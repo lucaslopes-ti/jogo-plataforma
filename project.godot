@@ -25,6 +25,8 @@ ScreenEffects="*res://screen_effects.gd"
 SoundManager="*res://sound_manager.gd"
 ParticleEffects="*res://particle_effects.gd"
 VisualEffects="*res://visual_effects.gd"
+SettingsManager="*res://settings_manager.gd"
+TechIcons="*res://tech_icons.gd"
 
 [debug]
 

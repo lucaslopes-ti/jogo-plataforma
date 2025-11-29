@@ -15,24 +15,42 @@ corner_radius_bottom_right = 0
 corner_radius_bottom_left = 0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2"]
-bg_color = Color(0.08, 0.2, 0.35, 0.95)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0, 0.8, 1, 0.8)
+bg_color = Color(0.05, 0.12, 0.22, 0.98)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0.9, 1, 1)
+shadow_color = Color(0, 0.7, 1, 0.5)
+shadow_size = 8
+shadow_offset = Vector2(2, 2)
 corner_radius_top_left = 0
 corner_radius_top_right = 0
 corner_radius_bottom_right = 0
 corner_radius_bottom_left = 0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3"]
-bg_color = Color(0.1, 0.25, 0.4, 0.9)
+bg_color = Color(0.06, 0.15, 0.25, 0.95)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0.9, 1, 1)
+shadow_color = Color(0, 0.7, 1, 0.4)
+shadow_size = 6
+shadow_offset = Vector2(2, 2)
+corner_radius_top_left = 0
+corner_radius_top_right = 0
+corner_radius_bottom_right = 0
+corner_radius_bottom_left = 0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4"]
+bg_color = Color(0, 0, 0, 0)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0, 0.7, 1, 0.6)
+border_color = Color(0, 0.9, 1, 1)
 corner_radius_top_left = 0
 corner_radius_top_right = 0
 corner_radius_bottom_right = 0
@@ -83,7 +101,7 @@ theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(0, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
-text = "👤 JOGADOR"
+text = "USER PROFILE"
 horizontal_alignment = 1
 
 [node name="UserInfoLabel" type="Label" parent="UI/TopLeftPanel/VBoxContainer"]
@@ -101,7 +119,7 @@ theme_override_font_sizes/font_size = 20
 theme_override_colors/font_color = Color(1, 0.8, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
-text = "⭐ Nível: 1"
+text = "LEVEL: 1"
 horizontal_alignment = 1
 
 [node name="TopRightPanel" type="Panel" parent="UI"]
@@ -137,7 +155,7 @@ theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(0, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
-text = "📊 ESTATÍSTICAS"
+text = "SYSTEM STATS"
 horizontal_alignment = 1
 
 [node name="ScoreLabel" type="Label" parent="UI/TopRightPanel/VBoxContainer"]
@@ -146,7 +164,7 @@ theme_override_font_sizes/font_size = 22
 theme_override_colors/font_color = Color(0, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
-text = "💎 Pontos: 0"
+text = "SCORE: 000000"
 horizontal_alignment = 1
 
 [node name="CoinsLabel" type="Label" parent="UI/TopRightPanel/VBoxContainer"]
@@ -155,7 +173,7 @@ theme_override_font_sizes/font_size = 20
 theme_override_colors/font_color = Color(1, 0.84, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
-text = "🪙 Moedas: 0"
+text = "CREDITS: 0000"
 horizontal_alignment = 1
 
 [node name="ExpLabel" type="Label" parent="UI/TopRightPanel/VBoxContainer"]
@@ -164,7 +182,7 @@ theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(0.5, 1, 0.8, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
-text = "⚡ EXP: 0/100"
+text = "EXP: 0/100"
 horizontal_alignment = 1
 
 [node name="QuestionsLabel" type="Label" parent="UI/TopRightPanel/VBoxContainer"]
@@ -173,7 +191,7 @@ theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(0.5, 1, 0.5, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
-text = "❓ Perguntas: 0/0 (0%)"
+text = "Q&A: 0/0 (0%)"
 horizontal_alignment = 1
 
 [node name="LivesLabel" type="Label" parent="UI/TopRightPanel/VBoxContainer"]
@@ -182,7 +200,7 @@ theme_override_font_sizes/font_size = 20
 theme_override_colors/font_color = Color(1, 0.5, 0.5, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
-text = "❤️ Vidas: 3"
+text = "LIVES: 3"
 horizontal_alignment = 1
 
 [node name="BottomLeftPanel" type="Panel" parent="UI"]
@@ -218,19 +236,34 @@ theme_override_font_sizes/font_size = 20
 theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 3
-text = "❤️ VIDA: 5/5"
+text = "VITAL SIGNS: 5/5"
 horizontal_alignment = 1
 
 [node name="HPBarBG" type="ColorRect" parent="UI/BottomLeftPanel/VBoxContainer"]
 layout_mode = 2
-custom_minimum_size = Vector2(0, 30)
-color = Color(0.15, 0.15, 0.15, 0.9)
+custom_minimum_size = Vector2(0, 35)
+color = Color(0.1, 0.1, 0.15, 0.95)
 
-[node name="HPBarFill" type="ColorRect" parent="UI/BottomLeftPanel/VBoxContainer"]
+[node name="HPBarBorder" type="Panel" parent="UI/BottomLeftPanel/VBoxContainer/HPBarBG"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_4")
+
+[node name="HPBarFill" type="ColorRect" parent="UI/BottomLeftPanel/VBoxContainer/HPBarBG"]
 layout_mode = 2
 size_flags_horizontal = 0
-custom_minimum_size = Vector2(450, 30)
+custom_minimum_size = Vector2(450, 31)
 color = Color(0, 1, 0.3, 1)
+offset_left = 2.0
+offset_top = 2.0
 
 [node name="HPBarContainer" type="HBoxContainer" parent="UI/BottomLeftPanel/VBoxContainer"]
 layout_mode = 2

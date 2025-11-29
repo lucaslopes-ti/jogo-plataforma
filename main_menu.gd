@@ -81,12 +81,40 @@ func _on_start_pressed():
 	get_tree().change_scene_to_file("res://Main.tscn")
 
 func _on_settings_pressed():
-	# Abrir menu de configurações (implementar depois)
-	print("Configurações")
+	print("Botão de configurações pressionado!")
+	
+	# Efeito de clique
+	if SoundManager:
+		SoundManager.play_ui_click_sound()
+	
+	# Verificar se SettingsManager está disponível
+	if not SettingsManager:
+		print("ERRO: SettingsManager não está disponível!")
+		return
+	
+	# Carregar e mostrar menu de configurações
+	var settings_scene = load("res://SettingsMenu.tscn")
+	if not settings_scene:
+		print("ERRO: Não foi possível carregar SettingsMenu.tscn")
+		return
+	
+	var settings_menu = settings_scene.instantiate()
+	if not settings_menu:
+		print("ERRO: Falha ao instanciar menu de configurações")
+		return
+	
+	settings_menu.parent_menu = self
+	add_child(settings_menu)
+	
+	# Pausar o menu principal quando o menu de configurações estiver aberto
+	# (mas não pausar a árvore toda, apenas desabilitar interação)
+	
+	print("Menu de configurações adicionado à árvore!")
 
 func _on_quit_pressed():
 	# Sair do jogo
 	get_tree().quit()
+
 
 
 

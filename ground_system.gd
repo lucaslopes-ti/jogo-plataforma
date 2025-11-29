@@ -155,3 +155,4 @@ func create_background_beam(parent: Node2D, x: float, y: float):
 	
 	parent.add_child(beam)
 
+
